@@ -26,4 +26,8 @@ public class Book {
     BookStatus status;
 
     Integer numberOfCopies;
+
+    @ManyToOne
+    @JoinColumn
+    Author author;
 }

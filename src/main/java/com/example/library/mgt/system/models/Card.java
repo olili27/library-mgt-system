@@ -24,4 +24,8 @@ public class Card {
     LocalDate createdAt;
 
     LocalDate expiresAt;
+
+    @OneToOne
+    @JoinColumn
+    Student student;
 }

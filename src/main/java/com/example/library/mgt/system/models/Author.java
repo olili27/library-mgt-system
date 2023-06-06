@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "authors")
@@ -28,4 +29,7 @@ public class Author {
 
     @CreationTimestamp
     LocalDate joinedAt;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    List<Book> books;
 }

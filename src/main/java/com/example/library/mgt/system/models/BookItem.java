@@ -22,4 +22,8 @@ public class BookItem {
 
     @Enumerated(EnumType.STRING)
     BookStatus status;
+
+    @OneToMany
+    @JoinColumn
+    Student student;
 }

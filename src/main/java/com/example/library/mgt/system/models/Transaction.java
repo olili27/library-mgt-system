@@ -26,4 +26,8 @@ public class Transaction {
 
     @CreationTimestamp
     LocalDate happenedAt;
+
+    @ManyToOne
+    @JoinColumn
+    Student student;
 }
