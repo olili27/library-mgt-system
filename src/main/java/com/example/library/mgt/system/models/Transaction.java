@@ -4,6 +4,9 @@ import com.example.library.mgt.system.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "transactions")
@@ -20,4 +23,7 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     TransactionStatus status;
+
+    @CreationTimestamp
+    LocalDate happenedAt;
 }
