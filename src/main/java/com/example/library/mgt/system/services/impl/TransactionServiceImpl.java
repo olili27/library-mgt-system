@@ -1,4 +1,6 @@
 package com.example.library.mgt.system.services.impl;
 
-public class TransactionServiceImpl {
+import com.example.library.mgt.system.services.interfaces.TransactionService;
+
+public class TransactionServiceImpl implements TransactionService {
 }

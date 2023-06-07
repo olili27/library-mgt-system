@@ -1,4 +1,6 @@
 package com.example.library.mgt.system.services.impl;
 
-public class BookItemServiceImpl {
+import com.example.library.mgt.system.services.interfaces.BookItemService;
+
+public class BookItemServiceImpl implements BookItemService {
 }

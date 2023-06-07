@@ -1,4 +1,6 @@
 package com.example.library.mgt.system.services.impl;
 
-public class CardServiceImpl {
+import com.example.library.mgt.system.services.interfaces.CardService;
+
+public class CardServiceImpl implements CardService {
 }

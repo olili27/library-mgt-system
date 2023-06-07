@@ -1,4 +1,6 @@
 package com.example.library.mgt.system.services.impl;
 
-public class AuthorServiceImpl {
+import com.example.library.mgt.system.services.interfaces.AuthorService;
+
+public class AuthorServiceImpl implements AuthorService {
 }
