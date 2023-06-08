@@ -3,6 +3,7 @@ package com.example.library.mgt.system.controllers;
 import com.example.library.mgt.system.dtos.entries.StudentEntryDto;
 import com.example.library.mgt.system.dtos.responses.ResponseDto;
 import com.example.library.mgt.system.dtos.responses.StudentResponseDto;
+import com.example.library.mgt.system.dtos.responses.StudentsResponseDto;
 import com.example.library.mgt.system.exceptions.EmailAlreadyExistsException;
 import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.services.interfaces.StudentService;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,12 +54,30 @@ public class StudentController {
             studentResponseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
             studentResponseDto.setResponseMessage(e.getMessage());
         }
+        catch (Exception e) {
+            studentResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(studentResponseDto, studentResponseDto.getResponseStatusCode());
     }
 
     @GetMapping("/get-by-name")
-    public ResponseEntity<StudentResponseDto> getStudentByName(@RequestParam String studentName) {
-        return  null;
+    public ResponseEntity<StudentsResponseDto> getStudentByName(@RequestParam String studentName) {
+
+        StudentsResponseDto studentsResponseDto = new StudentsResponseDto();
+
+        try {
+            studentsResponseDto = studentService.getStudentByName(studentName);
+            studentsResponseDto.setResponseStatusCode(HttpStatus.OK);
+        }
+        catch (ResourceNotFoundException e) {
+            studentsResponseDto.setResponseMessage(e.getMessage());
+            studentsResponseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e) {
+            studentsResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+        return  new ResponseEntity<>(studentsResponseDto, studentsResponseDto.getResponseStatusCode());
     }
 }
 

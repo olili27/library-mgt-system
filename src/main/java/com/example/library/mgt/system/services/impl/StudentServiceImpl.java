@@ -3,6 +3,7 @@ package com.example.library.mgt.system.services.impl;
 import com.example.library.mgt.system.dtos.entries.StudentEntryDto;
 import com.example.library.mgt.system.dtos.responses.ResponseDto;
 import com.example.library.mgt.system.dtos.responses.StudentResponseDto;
+import com.example.library.mgt.system.dtos.responses.StudentsResponseDto;
 import com.example.library.mgt.system.exceptions.EmailAlreadyExistsException;
 import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.models.Student;
@@ -12,6 +13,7 @@ import com.example.library.mgt.system.transformers.StudentTransformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,8 +49,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentResponseDto> getStudentByName(String studentName) throws Exception {
+    public StudentsResponseDto getStudentByName(String studentName) throws Exception {
         if (studentRepository.existsByName(studentName)) throw new ResourceNotFoundException("No user found");
-        return null;
+
+        List<Student> students = studentRepository.findAll();
+        List<StudentResponseDto> studentResponseDtos = new ArrayList<>();
+        for (Student student: students) {
+            studentResponseDtos.add(StudentTransformer.studentEntityToStudentResponseDto(student));
+        }
+        return StudentsResponseDto.builder()
+                .studentResponseDtos(studentResponseDtos)
+                .build();
     }
 }
