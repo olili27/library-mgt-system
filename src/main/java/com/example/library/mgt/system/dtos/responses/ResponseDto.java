@@ -15,6 +15,7 @@ public class ResponseDto {
     String studentName;
 
     String studentSchool;
+
     Integer studentAge;
 
     Integer authorAge;

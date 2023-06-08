@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 
 public interface StudentService {
     ResponseDto addStudent(StudentEntryDto studentEntryDto) throws Exception;
+
+    ResponseDto getStudentById(Integer studentId) throws Exception;
 }
