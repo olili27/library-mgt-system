@@ -1,7 +1,6 @@
 package com.example.library.mgt.system.controllers;
 
 import com.example.library.mgt.system.dtos.entries.StudentEntryDto;
-import com.example.library.mgt.system.dtos.responses.ResponseDto;
 import com.example.library.mgt.system.dtos.responses.StudentResponseDto;
 import com.example.library.mgt.system.dtos.responses.StudentsResponseDto;
 import com.example.library.mgt.system.exceptions.EmailAlreadyExistsException;
@@ -11,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,12 +59,12 @@ public class StudentController {
     }
 
     @GetMapping("/get-by-name")
-    public ResponseEntity<StudentsResponseDto> getStudentByName(@RequestParam String studentName) {
+    public ResponseEntity<StudentsResponseDto> getStudentsByName(@RequestParam String studentName) {
 
         StudentsResponseDto studentsResponseDto = new StudentsResponseDto();
 
         try {
-            studentsResponseDto = studentService.getStudentByName(studentName);
+            studentsResponseDto = studentService.getStudentsByName(studentName);
             studentsResponseDto.setResponseStatusCode(HttpStatus.OK);
         }
         catch (ResourceNotFoundException e) {
@@ -79,12 +76,31 @@ public class StudentController {
         }
         return  new ResponseEntity<>(studentsResponseDto, studentsResponseDto.getResponseStatusCode());
     }
+
+    @GetMapping("get-all")
+    public ResponseEntity<StudentsResponseDto> getAllStudents() {
+        StudentsResponseDto studentsResponseDto = new StudentsResponseDto();
+
+        try {
+            studentsResponseDto = studentService.getAlStudents();
+            studentsResponseDto.setResponseStatusCode(HttpStatus.OK);
+        }
+        catch (ResourceNotFoundException e) {
+            studentsResponseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
+            studentsResponseDto.setResponseMessage(e.getMessage());
+        }
+        catch (Exception e) {
+            studentsResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+
+        return  new ResponseEntity<>(studentsResponseDto, studentsResponseDto.getResponseStatusCode());
+    }
 }
 
 /*
 TODO
-get by id
-get by name
+get by id ----
+get students by name ---
 get all
 get by age
 get by school

@@ -41,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponseDto getStudentById(Integer studentId) throws Exception {
-        if (!studentRepository.existsById(studentId)) throw new ResourceNotFoundException("User not found");
+        if (!studentRepository.existsById(studentId)) throw new ResourceNotFoundException("Student not found");
 
         Student student = studentRepository.findById(studentId).get();
 
@@ -49,14 +49,33 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentsResponseDto getStudentByName(String studentName) throws Exception {
-        if (studentRepository.existsByName(studentName)) throw new ResourceNotFoundException("No user found");
+    public StudentsResponseDto getStudentsByName(String studentName) throws Exception {
+        if (studentRepository.existsByName(studentName)) throw new ResourceNotFoundException("No student found with name " + studentName);
 
-        List<Student> students = studentRepository.findAll();
+        List<Student> students = studentRepository.findAllByName(studentName);
         List<StudentResponseDto> studentResponseDtos = new ArrayList<>();
+
         for (Student student: students) {
             studentResponseDtos.add(StudentTransformer.studentEntityToStudentResponseDto(student));
         }
+
+        return StudentsResponseDto.builder()
+                .studentResponseDtos(studentResponseDtos)
+                .build();
+    }
+
+    @Override
+    public StudentsResponseDto getAlStudents() throws Exception {
+        List<Student> students = studentRepository.findAll();
+
+        if (students == null) throw new ResourceNotFoundException("No students found");
+
+        List<StudentResponseDto> studentResponseDtos = new ArrayList<>();
+
+        for (Student student: students) {
+            studentResponseDtos.add(StudentTransformer.studentEntityToStudentResponseDto(student));
+        }
+
         return StudentsResponseDto.builder()
                 .studentResponseDtos(studentResponseDtos)
                 .build();
