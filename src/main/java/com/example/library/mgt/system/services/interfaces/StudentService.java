@@ -13,4 +13,6 @@ public interface StudentService {
     StudentsResponseDto getStudentsByName(String studentName)  throws Exception;
 
     StudentsResponseDto getAlStudents() throws Exception;
+
+    StudentsResponseDto getStudentsByAge(Integer age) throws Exception;
 }

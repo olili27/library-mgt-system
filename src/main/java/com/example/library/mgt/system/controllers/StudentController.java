@@ -20,7 +20,6 @@ public class StudentController {
 
     @PostMapping("add")
     public ResponseEntity<StudentResponseDto> addStudent(@RequestBody StudentEntryDto studentEntryDto) throws Exception {
-
         StudentResponseDto studentResponseDto = new StudentResponseDto();
 
         try {
@@ -40,7 +39,6 @@ public class StudentController {
 
     @GetMapping("/get-by-id/{studentId}")
     public ResponseEntity<StudentResponseDto> getStudentById(@PathVariable("studentId") Integer studentId) throws Exception {
-
         StudentResponseDto studentResponseDto = new StudentResponseDto();
 
         try {
@@ -59,8 +57,7 @@ public class StudentController {
     }
 
     @GetMapping("/get-by-name")
-    public ResponseEntity<StudentsResponseDto> getStudentsByName(@RequestParam String studentName) {
-
+    public ResponseEntity<StudentsResponseDto> getStudentsByName(@RequestParam("studentName") String studentName) {
         StudentsResponseDto studentsResponseDto = new StudentsResponseDto();
 
         try {
@@ -77,12 +74,31 @@ public class StudentController {
         return  new ResponseEntity<>(studentsResponseDto, studentsResponseDto.getResponseStatusCode());
     }
 
-    @GetMapping("get-all")
+    @GetMapping("/get-all")
     public ResponseEntity<StudentsResponseDto> getAllStudents() {
         StudentsResponseDto studentsResponseDto = new StudentsResponseDto();
 
         try {
             studentsResponseDto = studentService.getAlStudents();
+            studentsResponseDto.setResponseStatusCode(HttpStatus.OK);
+        }
+        catch (ResourceNotFoundException e) {
+            studentsResponseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
+            studentsResponseDto.setResponseMessage(e.getMessage());
+        }
+        catch (Exception e) {
+            studentsResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+
+        return  new ResponseEntity<>(studentsResponseDto, studentsResponseDto.getResponseStatusCode());
+    }
+
+    @GetMapping("/get-by-age")
+    public ResponseEntity<StudentsResponseDto> getStudentsByAge(@RequestParam("age") Integer age) {
+        StudentsResponseDto studentsResponseDto = new StudentsResponseDto();
+
+        try {
+            studentsResponseDto = studentService.getStudentsByAge(age);
             studentsResponseDto.setResponseStatusCode(HttpStatus.OK);
         }
         catch (ResourceNotFoundException e) {
@@ -101,8 +117,8 @@ public class StudentController {
 TODO
 get by id ----
 get students by name ---
-get all
-get by age
+get all ---
+get by age ----
 get by school
 update
 get students by book name

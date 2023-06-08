@@ -59,9 +59,7 @@ public class StudentServiceImpl implements StudentService {
             studentResponseDtos.add(StudentTransformer.studentEntityToStudentResponseDto(student));
         }
 
-        return StudentsResponseDto.builder()
-                .studentResponseDtos(studentResponseDtos)
-                .build();
+        return StudentTransformer.toStudentsResponseDto(studentResponseDtos);
     }
 
     @Override
@@ -76,8 +74,21 @@ public class StudentServiceImpl implements StudentService {
             studentResponseDtos.add(StudentTransformer.studentEntityToStudentResponseDto(student));
         }
 
-        return StudentsResponseDto.builder()
-                .studentResponseDtos(studentResponseDtos)
-                .build();
+        return StudentTransformer.toStudentsResponseDto(studentResponseDtos);
+    }
+
+    @Override
+    public StudentsResponseDto getStudentsByAge(Integer age) throws Exception {
+        List<Student> students = studentRepository.findAllByAge(age);
+
+        if (students == null) throw new ResourceNotFoundException("No students found");
+
+        List<StudentResponseDto> studentResponseDtos = new ArrayList<>();
+
+        for (Student student: students) {
+            studentResponseDtos.add(StudentTransformer.studentEntityToStudentResponseDto(student));
+        }
+
+        return StudentTransformer.toStudentsResponseDto(studentResponseDtos);
     }
 }

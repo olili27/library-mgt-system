@@ -1,8 +1,11 @@
 package com.example.library.mgt.system.transformers;
 
 import com.example.library.mgt.system.dtos.responses.StudentResponseDto;
+import com.example.library.mgt.system.dtos.responses.StudentsResponseDto;
 import com.example.library.mgt.system.models.Student;
 import lombok.experimental.UtilityClass;
+
+import java.util.List;
 
 @UtilityClass
 public class StudentTransformer {
@@ -13,6 +16,12 @@ public class StudentTransformer {
                 .studentSchool(student.getSchool())
                 .studentEmail(student.getEmail())
                 .studentAge(student.getAge())
+                .build();
+    }
+
+    public StudentsResponseDto toStudentsResponseDto(List<StudentResponseDto> studentResponseDtos) {
+        return StudentsResponseDto.builder()
+                .studentResponseDtos(studentResponseDtos)
                 .build();
     }
 }
