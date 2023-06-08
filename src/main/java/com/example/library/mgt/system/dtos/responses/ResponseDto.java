@@ -12,11 +12,8 @@ import org.springframework.http.HttpStatus;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResponseDto {
-    String studentName;
 
-    String studentSchool;
-
-    Integer studentAge;
+    String authorEmail;
 
     Integer authorAge;
 

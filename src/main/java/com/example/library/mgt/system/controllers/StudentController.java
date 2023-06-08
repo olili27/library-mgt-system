@@ -2,6 +2,7 @@ package com.example.library.mgt.system.controllers;
 
 import com.example.library.mgt.system.dtos.entries.StudentEntryDto;
 import com.example.library.mgt.system.dtos.responses.ResponseDto;
+import com.example.library.mgt.system.dtos.responses.StudentResponseDto;
 import com.example.library.mgt.system.exceptions.EmailAlreadyExistsException;
 import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.services.interfaces.StudentService;
@@ -18,39 +19,44 @@ public class StudentController {
     private final StudentService studentService;
 
     @PostMapping("add")
-    public ResponseEntity<ResponseDto> addStudent(@RequestBody StudentEntryDto studentEntryDto) throws Exception {
+    public ResponseEntity<StudentResponseDto> addStudent(@RequestBody StudentEntryDto studentEntryDto) throws Exception {
 
-        ResponseDto responseDto = new ResponseDto();
+        StudentResponseDto studentResponseDto = new StudentResponseDto();
 
         try {
-            responseDto = studentService.addStudent(studentEntryDto);
-            responseDto.setResponseStatusCode(HttpStatus.CREATED);
+            studentResponseDto = studentService.addStudent(studentEntryDto);
+            studentResponseDto.setResponseStatusCode(HttpStatus.CREATED);
         }
         catch (EmailAlreadyExistsException e) {
-            responseDto.setResponseMessage(e.getMessage());
-            responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+            studentResponseDto.setResponseMessage(e.getMessage());
+            studentResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
-            responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+            studentResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(responseDto, responseDto.getResponseStatusCode());
+        return new ResponseEntity<>(studentResponseDto, studentResponseDto.getResponseStatusCode());
     }
 
     @GetMapping("/get-by-id/{studentId}")
-    public ResponseEntity<ResponseDto> getStudentById(@PathVariable("studentId") Integer studentId) throws Exception {
+    public ResponseEntity<StudentResponseDto> getStudentById(@PathVariable("studentId") Integer studentId) throws Exception {
 
-        ResponseDto responseDto = new ResponseDto();
+        StudentResponseDto studentResponseDto = new StudentResponseDto();
 
         try {
-            responseDto = studentService.getStudentById(studentId);
-            responseDto.setResponseStatusCode(HttpStatus.OK);
+            studentResponseDto = studentService.getStudentById(studentId);
+            studentResponseDto.setResponseStatusCode(HttpStatus.OK);
         }
         catch (ResourceNotFoundException e) {
-            responseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
-            responseDto.setResponseMessage(e.getMessage());
+            studentResponseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
+            studentResponseDto.setResponseMessage(e.getMessage());
         }
-        return new ResponseEntity<>(responseDto, responseDto.getResponseStatusCode());
+        return new ResponseEntity<>(studentResponseDto, studentResponseDto.getResponseStatusCode());
+    }
+
+    @GetMapping("/get-by-name")
+    public ResponseEntity<StudentResponseDto> getStudentByName(@RequestParam String studentName) {
+        return  null;
     }
 }
 
