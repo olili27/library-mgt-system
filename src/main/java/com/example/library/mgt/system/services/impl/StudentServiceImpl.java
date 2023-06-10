@@ -90,4 +90,14 @@ public class StudentServiceImpl implements StudentService {
 
         return StudentTransformer.toStudentsResponseDto(studentResponseDtos);
     }
+
+    @Override
+    public StudentResponseDto updateStudent(Integer studentId, StudentEntryDto studentEntryDto) {
+        Student student = studentRepository.findById(studentId).get();
+
+        student = StudentTransformer.studentEntryDtoToStudentEntry(studentEntryDto);
+        Student savedStudent = studentRepository.save(student);
+
+        return StudentTransformer.studentEntityToStudentResponseDto(student);
+    }
 }

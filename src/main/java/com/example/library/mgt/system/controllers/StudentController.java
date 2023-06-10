@@ -111,6 +111,12 @@ public class StudentController {
 
         return  new ResponseEntity<>(studentsResponseDto, studentsResponseDto.getResponseStatusCode());
     }
+
+    @PutMapping("/update/{studentI}")
+    public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody StudentEntryDto studentEntryDto) {
+
+        return new ResponseEntity<>(studentService.updateStudent(studentId, studentEntryDto), HttpStatus.CREATED);
+    }
 }
 
 /*
