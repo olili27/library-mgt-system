@@ -9,14 +9,17 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StudentResponseDto {
-    String studentName;
+public class BookResponseDto {
 
-    Integer studentAge;
+    String bookTitle;
 
-    String studentEmail;
+    String category;
 
-    String studentSchool;
+    String authorName;
+
+    Integer numberOfCopies;
+
+    String bookStatus;
 
     String responseMessage;
 

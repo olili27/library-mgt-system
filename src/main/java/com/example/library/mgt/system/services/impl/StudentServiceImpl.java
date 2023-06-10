@@ -1,7 +1,6 @@
 package com.example.library.mgt.system.services.impl;
 
 import com.example.library.mgt.system.dtos.entries.StudentEntryDto;
-import com.example.library.mgt.system.dtos.responses.ResponseDto;
 import com.example.library.mgt.system.dtos.responses.StudentResponseDto;
 import com.example.library.mgt.system.dtos.responses.StudentsResponseDto;
 import com.example.library.mgt.system.exceptions.EmailAlreadyExistsException;

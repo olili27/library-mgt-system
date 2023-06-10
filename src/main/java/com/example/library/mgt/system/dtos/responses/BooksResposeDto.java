@@ -12,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class StudentsResponseDto {
+public class BooksResposeDto {
 
-    List<StudentResponseDto> studentResponseDtos;
+    List<BookResponseDto> bookResponseDtos;
 
     String responseMessage;
 

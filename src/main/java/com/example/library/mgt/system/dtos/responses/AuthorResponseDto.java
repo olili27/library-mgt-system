@@ -1,33 +1,29 @@
 package com.example.library.mgt.system.dtos.responses;
 
-import com.example.library.mgt.system.enums.BookStatus;
-import com.example.library.mgt.system.enums.TransactionStatus;
+import com.example.library.mgt.system.models.Book;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
+
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ResponseDto {
+public class AuthorResponseDto {
+
+    String authorName;
 
     String authorEmail;
 
     Integer authorAge;
 
-    String authorName;
+    List<Book> books;
 
-    String bookName;
-
-    BookStatus bookStatus;
-
-    TransactionStatus transactionStatus;
 
     String responseMessage;
 
     HttpStatus responseStatusCode;
-
-    Integer numberOfCopies;
 }
