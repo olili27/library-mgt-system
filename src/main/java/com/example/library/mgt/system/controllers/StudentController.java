@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/student")
 public class StudentController {
 
+      /*
+      TODO
+      -> handle null or empty fields
+       */
+
     private final StudentService studentService;
 
     @PostMapping("add")
@@ -112,7 +117,7 @@ public class StudentController {
         return  new ResponseEntity<>(studentsResponseDto, studentsResponseDto.getResponseStatusCode());
     }
 
-    @PutMapping("/update/{studentI}")
+    @PutMapping("/update/{studentId}")
     public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody StudentEntryDto studentEntryDto) {
 
         return new ResponseEntity<>(studentService.updateStudent(studentId, studentEntryDto), HttpStatus.CREATED);

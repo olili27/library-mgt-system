@@ -23,7 +23,7 @@ public class BookItem {
     @Enumerated(EnumType.STRING)
     BookStatus status;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn
     Student student;
 }
