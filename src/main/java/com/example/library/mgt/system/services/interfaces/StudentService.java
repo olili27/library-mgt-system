@@ -6,6 +6,7 @@ import com.example.library.mgt.system.dtos.responses.StudentsResponseDto;
 
 
 public interface StudentService {
+
     StudentResponseDto addStudent(StudentEntryDto studentEntryDto) throws Exception;
 
     StudentResponseDto getStudentById(Integer studentId) throws Exception;

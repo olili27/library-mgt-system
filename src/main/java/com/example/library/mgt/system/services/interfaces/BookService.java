@@ -1,7 +1,10 @@
 package com.example.library.mgt.system.services.interfaces;
 
+import com.example.library.mgt.system.dtos.entries.BookEntryDto;
+import com.example.library.mgt.system.dtos.responses.BookResponseDto;
 import org.springframework.stereotype.Service;
 
-@Service
 public interface BookService {
+
+    BookResponseDto addBook(Integer authorId, BookEntryDto bookEntryDto);
 }

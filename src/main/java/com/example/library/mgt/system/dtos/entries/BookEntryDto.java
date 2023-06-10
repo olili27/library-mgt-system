@@ -12,7 +12,5 @@ public class BookEntryDto {
 
     String category;
 
-    Integer authorId;
-
     Integer numberOfCopies;
 }
