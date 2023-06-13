@@ -7,4 +7,8 @@ import org.springframework.stereotype.Service;
 public interface BookService {
 
     BookResponseDto addBook(Integer authorId, BookEntryDto bookEntryDto);
+
+    BookResponseDto getBookById(Integer bookId);
+
+    BookResponseDto getBookByName(String bookName) throws Exception;
 }

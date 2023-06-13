@@ -3,6 +3,7 @@ package com.example.library.mgt.system.services.impl;
 import com.example.library.mgt.system.dtos.entries.BookEntryDto;
 import com.example.library.mgt.system.dtos.responses.BookResponseDto;
 import com.example.library.mgt.system.enums.BookStatus;
+import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.models.Author;
 import com.example.library.mgt.system.models.Book;
 import com.example.library.mgt.system.repositories.AuthorRepository;
@@ -31,6 +32,21 @@ public class BookServiceImpl implements BookService {
         author.getBooks().add(book);
         authorRepository.save(author);
 
+        return BookTransformer.bookEntityToBookResponseDto(book);
+    }
+
+    @Override
+    public BookResponseDto getBookById(Integer bookId) {
+        Book book = bookRepository.findById(bookId).get();
+
+        return BookTransformer.bookEntityToBookResponseDto(book);
+    }
+
+    @Override
+    public BookResponseDto getBookByName(String bookName) throws Exception {
+        if (!bookRepository.existsByName(bookName)) throw new ResourceNotFoundException("No book found found");
+
+        Book book = bookRepository.findByName(bookName);
         return BookTransformer.bookEntityToBookResponseDto(book);
     }
 }

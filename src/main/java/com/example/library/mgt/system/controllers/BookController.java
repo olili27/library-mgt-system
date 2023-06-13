@@ -2,6 +2,7 @@ package com.example.library.mgt.system.controllers;
 
 import com.example.library.mgt.system.dtos.entries.BookEntryDto;
 import com.example.library.mgt.system.dtos.responses.BookResponseDto;
+import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.services.interfaces.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,24 @@ public class BookController {
 
     @GetMapping("/get-by-id/{bookId}")
     public ResponseEntity<BookResponseDto> getBookById(@PathVariable("bookId") Integer bookId) {
-        return null;
+        return new ResponseEntity<>(bookService.getBookById(bookId), HttpStatus.OK);
     }
+
+    @GetMapping("/get-by-name")
+    public ResponseEntity<BookResponseDto> getBookByName(@RequestParam("bookName") String bookName)throws Exception {
+        BookResponseDto bookResponseDto = new BookResponseDto();
+        try {
+            bookResponseDto = bookService.getBookByName(bookName);
+            bookResponseDto.setResponseStatusCode(HttpStatus.OK);
+        }
+        catch (ResourceNotFoundException e) {
+            bookResponseDto.setResponseMessage(e.getMessage());
+            bookResponseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e) {
+            bookResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(bookResponseDto, bookResponseDto.getResponseStatusCode());
+    }
+
 }
