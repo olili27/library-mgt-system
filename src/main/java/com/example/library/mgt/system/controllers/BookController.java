@@ -2,6 +2,7 @@ package com.example.library.mgt.system.controllers;
 
 import com.example.library.mgt.system.dtos.entries.BookEntryDto;
 import com.example.library.mgt.system.dtos.responses.BookResponseDto;
+import com.example.library.mgt.system.dtos.responses.BooksResposeDto;
 import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.services.interfaces.BookService;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,11 @@ public class BookController {
             bookResponseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(bookResponseDto, bookResponseDto.getResponseStatusCode());
+    }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<BooksResposeDto> getAllBooks() {
+        return null;
     }
 
 }
