@@ -44,9 +44,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponseDto getBookByName(String bookName) throws Exception {
-        if (!bookRepository.existsByName(bookName)) throw new ResourceNotFoundException("No book found found");
+        if (!bookRepository.existsByTitle(bookName)) throw new ResourceNotFoundException("No book found found");
 
-        Book book = bookRepository.findByName(bookName);
+        Book book = bookRepository.findByTitle(bookName);
         return BookTransformer.bookEntityToBookResponseDto(book);
     }
 }
