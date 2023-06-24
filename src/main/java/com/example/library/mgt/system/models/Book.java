@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Table(name = "books")
 @AllArgsConstructor
@@ -30,4 +32,7 @@ public class Book {
     @ManyToOne
     @JoinColumn
     Author author;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    List<BookItem> bookItems;
 }

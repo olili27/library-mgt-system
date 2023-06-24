@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 
 @Entity
@@ -21,6 +22,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    String transactionNumber;
+
     @Enumerated(EnumType.STRING)
     TransactionStatus status;
 
@@ -30,4 +33,8 @@ public class Transaction {
     @ManyToOne
     @JoinColumn
     Student student;
+
+    @ManyToOne
+    @JoinColumn
+    BookItem bookItem;
 }

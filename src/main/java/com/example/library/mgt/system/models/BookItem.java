@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Table(name = "book_items")
 @AllArgsConstructor
@@ -26,4 +28,11 @@ public class BookItem {
     @ManyToOne
     @JoinColumn
     Student student;
+
+    @ManyToOne
+    @JoinColumn
+    Book book;
+
+    @OneToMany(mappedBy = "bookItem", cascade = CascadeType.ALL)
+    List<Transaction> transactions;
 }
