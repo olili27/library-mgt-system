@@ -2,7 +2,7 @@ package com.example.library.mgt.system.controllers;
 
 import com.example.library.mgt.system.dtos.entries.BookEntryDto;
 import com.example.library.mgt.system.dtos.responses.BookResponseDto;
-import com.example.library.mgt.system.dtos.responses.BooksResposeDto;
+import com.example.library.mgt.system.dtos.responses.BooksResponseDto;
 import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.services.interfaces.BookService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class BookController {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<BooksResposeDto> getAllBooks() {
+    public ResponseEntity<BooksResponseDto> getAllBooks() {
         return null;
     }
 

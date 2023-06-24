@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BooksResposeDto {
+public class BooksResponseDto {
 
     List<BookResponseDto> bookResponseDtos;
 

@@ -1,7 +1,8 @@
 package com.example.library.mgt.system.services.interfaces;
 
-import org.springframework.stereotype.Service;
+import com.example.library.mgt.system.dtos.entries.TransactionEntryDto;
+import com.example.library.mgt.system.dtos.responses.TransactionResponseDto;
 
-@Service
 public interface TransactionService {
+    TransactionResponseDto bookACopy(TransactionEntryDto bookingDto) throws Exception;
 }

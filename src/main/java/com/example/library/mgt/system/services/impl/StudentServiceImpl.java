@@ -49,7 +49,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentsResponseDto getStudentsByName(String studentName) throws Exception {
-        if (studentRepository.existsByName(studentName)) throw new ResourceNotFoundException("No student found with name " + studentName);
+        if (!studentRepository.existsByName(studentName)) throw new ResourceNotFoundException("No student found with name " + studentName);
 
         List<Student> students = studentRepository.findAllByName(studentName);
         List<StudentResponseDto> studentResponseDtos = new ArrayList<>();
@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentsResponseDto getAlStudents() throws Exception {
+    public StudentsResponseDto getAllStudents() throws Exception {
         List<Student> students = studentRepository.findAll();
 
         if (students == null) throw new ResourceNotFoundException("No students found");

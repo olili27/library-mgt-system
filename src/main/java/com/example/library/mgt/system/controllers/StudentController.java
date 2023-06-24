@@ -23,7 +23,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @PostMapping("add")
+    @PostMapping("/add")
     public ResponseEntity<StudentResponseDto> addStudent(@RequestBody StudentEntryDto studentEntryDto) throws Exception {
         StudentResponseDto studentResponseDto = new StudentResponseDto();
 
@@ -84,7 +84,7 @@ public class StudentController {
         StudentsResponseDto studentsResponseDto = new StudentsResponseDto();
 
         try {
-            studentsResponseDto = studentService.getAlStudents();
+            studentsResponseDto = studentService.getAllStudents();
             studentsResponseDto.setResponseStatusCode(HttpStatus.OK);
         }
         catch (ResourceNotFoundException e) {
