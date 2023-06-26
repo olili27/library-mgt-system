@@ -118,9 +118,23 @@ public class StudentController {
     }
 
     @PutMapping("/update/{studentId}")
-    public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody StudentEntryDto studentEntryDto) {
+    public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody StudentEntryDto studentEntryDto) throws Exception {
 
-        return new ResponseEntity<>(studentService.updateStudent(studentId, studentEntryDto), HttpStatus.CREATED);
+        StudentResponseDto responseDto = new StudentResponseDto();
+
+        try {
+            responseDto = studentService.updateStudent(studentId, studentEntryDto);
+            responseDto.setResponseStatusCode(HttpStatus.CREATED);
+        }
+        catch (EmailAlreadyExistsException e) {
+            responseDto.setResponseMessage(e.getMessage());
+            responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+            responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(responseDto, responseDto.getResponseStatusCode());
     }
 }
 

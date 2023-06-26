@@ -62,6 +62,9 @@ public class TransactionServiceImpl implements TransactionService {
             throw new BookNotAvailableException("No copies available");
         }
 
+        book.decreaseNumberOfCopies();
+        if (book.getNumberOfCopies() == 0) book.setStatus(BookStatus.OUT_OF_COPIES);
+
         Student student = studentRepository.findByEmail(bookingDto.getStudentEmail());
         BookItem bookItem = BookItem.builder()
                 .title(book.getTitle())

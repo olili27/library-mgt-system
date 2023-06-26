@@ -49,9 +49,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentsResponseDto getStudentsByName(String studentName) throws Exception {
-        if (!studentRepository.existsByName(studentName)) throw new ResourceNotFoundException("No student found with name " + studentName);
+        if (!studentRepository.existsByNameContaining(studentName)) throw new ResourceNotFoundException("No student found with name " + studentName);
 
-        List<Student> students = studentRepository.findAllByName(studentName);
+        List<Student> students = studentRepository.findByNameContaining(studentName);
         List<StudentResponseDto> studentResponseDtos = new ArrayList<>();
 
         for (Student student: students) {
@@ -92,12 +92,18 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentResponseDto updateStudent(Integer studentId, StudentEntryDto studentEntryDto) {
+    public StudentResponseDto updateStudent(Integer studentId, StudentEntryDto studentEntryDto) throws Exception {
         Student student = studentRepository.findById(studentId).get();
 
-        student = StudentTransformer.studentEntryDtoToStudentEntry(studentEntryDto);
+        if (!student.getEmail().equals(studentEntryDto.getEmail()) && studentRepository.existsByEmail(studentEntryDto.getEmail())) throw new EmailAlreadyExistsException("Email already exists");
+
+        student.setName(studentEntryDto.getName());
+        student.setAge(studentEntryDto.getAge());
+        student.setEmail(studentEntryDto.getEmail());
+        student.setSchool(studentEntryDto.getSchool());
+
         Student savedStudent = studentRepository.save(student);
 
-        return StudentTransformer.studentEntityToStudentResponseDto(student);
+        return StudentTransformer.studentEntityToStudentResponseDto(savedStudent);
     }
 }

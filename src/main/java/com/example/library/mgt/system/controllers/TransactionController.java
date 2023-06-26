@@ -33,6 +33,7 @@ public class TransactionController {
             responseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
+            responseDto.setResponseMessage(e.getMessage());
             responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
 

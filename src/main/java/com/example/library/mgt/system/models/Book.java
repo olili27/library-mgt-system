@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,7 +35,7 @@ public class Book {
     Author author;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    List<BookItem> bookItems;
+    List<BookItem> bookItems = new ArrayList<>();
 
     public void decreaseNumberOfCopies() {
         setNumberOfCopies(getNumberOfCopies() - 1);;

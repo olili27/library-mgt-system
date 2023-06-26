@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,5 +35,5 @@ public class BookItem {
     Book book;
 
     @OneToMany(mappedBy = "bookItem", cascade = CascadeType.ALL)
-    List<Transaction> transactions;
+    List<Transaction> transactions = new ArrayList<>();
 }

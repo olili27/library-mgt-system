@@ -17,5 +17,5 @@ public interface StudentService {
 
     StudentsResponseDto getStudentsByAge(Integer age) throws Exception;
 
-    StudentResponseDto updateStudent(Integer studentId, StudentEntryDto studentEntryDto);
+    StudentResponseDto updateStudent(Integer studentId, StudentEntryDto studentEntryDto) throws Exception;
 }

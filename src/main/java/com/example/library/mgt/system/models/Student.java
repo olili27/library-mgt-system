@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,8 +37,8 @@ public class Student {
     Card card;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    List<Transaction> transactions;
+    List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    List<BookItem> bookItems;
+    List<BookItem> bookItems = new ArrayList<>();
 }
