@@ -36,12 +36,4 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     List<BookItem> bookItems = new ArrayList<>();
-
-    public void decreaseNumberOfCopies() {
-        setNumberOfCopies(getNumberOfCopies() - 1);;
-    }
-
-    public void increaseNumberOfCopies() {
-        setNumberOfCopies(getNumberOfCopies() + 1);
-    }
 }

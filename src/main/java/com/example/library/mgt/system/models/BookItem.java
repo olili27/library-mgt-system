@@ -26,9 +26,9 @@ public class BookItem {
     @Enumerated(EnumType.STRING)
     BookStatus status;
 
-    @ManyToOne
+    @ManyToMany
     @JoinColumn
-    Student student;
+    List<Student> students = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn

@@ -27,8 +27,6 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final StudentRepository studentRepository;
 
-    private final BookItemRepository bookItemRepository;
-
     private final BookRepository bookRepository;
 
     private final TransactionRepository transactionRepository;
@@ -62,18 +60,16 @@ public class TransactionServiceImpl implements TransactionService {
             throw new BookNotAvailableException("No copies available");
         }
 
-        book.decreaseNumberOfCopies();
-        if (book.getNumberOfCopies() == 0) book.setStatus(BookStatus.OUT_OF_COPIES);
-
         Student student = studentRepository.findByEmail(bookingDto.getStudentEmail());
-        BookItem bookItem = BookItem.builder()
-                .title(book.getTitle())
-                .status(BookStatus.BOOKED)
-                .student(student)
-                .book(book)
-                .build();
 
+        BookItem bookItem = book.getBookItems().remove(0);
+        bookItem.setStatus(BookStatus.BOOKED);
+        bookItem.getStudents().add(student);
         bookItem.getTransactions().add(transaction);
+
+        book.setNumberOfCopies(book.getBookItems().size());
+
+        if (book.getNumberOfCopies() == 0) book.setStatus(BookStatus.OUT_OF_COPIES);
 
         transaction.setBookItem(bookItem);
         transaction.setStudent(student);

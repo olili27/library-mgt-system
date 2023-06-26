@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,5 +32,5 @@ public class Author {
     LocalDate joinedAt;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    List<Book> books;
+    List<Book> books = new ArrayList<>();
 }
