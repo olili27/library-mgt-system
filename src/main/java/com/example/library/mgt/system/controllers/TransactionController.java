@@ -3,6 +3,7 @@ package com.example.library.mgt.system.controllers;
 import com.example.library.mgt.system.dtos.entries.TransactionEntryDto;
 import com.example.library.mgt.system.dtos.responses.TransactionResponseDto;
 import com.example.library.mgt.system.exceptions.BookNotAvailableException;
+import com.example.library.mgt.system.exceptions.InvalidCardException;
 import com.example.library.mgt.system.services.interfaces.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,8 +33,11 @@ public class TransactionController {
             responseDto.setResponseMessage(e.getMessage());
             responseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
         }
-        catch (Exception e) {
+        catch (InvalidCardException e) {
             responseDto.setResponseMessage(e.getMessage());
+            responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
             responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
 

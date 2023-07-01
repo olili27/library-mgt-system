@@ -20,6 +20,8 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    boolean hasBooked;
+
     @CreationTimestamp
     LocalDate createdAt;
 

@@ -22,26 +22,11 @@ class StudentRepositoryTest {
     Student student1;
     Student student2;
     Student student3;
+    Student student4;
 
     @BeforeEach
     void setUp() {
         student1 = Student.builder()
-                .name("timothy")
-                .age(24)
-                .school("must")
-                .email("timo@gmail.com")
-                .card(Card.builder().student(student1).build())
-                .build();
-
-        student2 = Student.builder()
-                .name("timothy")
-                .age(26)
-                .school("kyu")
-                .email("timothy@gmail.com")
-                .card(Card.builder().student(student2).build())
-                .build();
-
-        student3 = Student.builder()
                 .name("john")
                 .age(20)
                 .school("kiu")
@@ -49,7 +34,31 @@ class StudentRepositoryTest {
                 .card(Card.builder().student(student1).build())
                 .build();
 
-        studentRepository.saveAll(List.of(student1, student2, student3));
+        student2 = Student.builder()
+                .name("timothy")
+                .age(24)
+                .school("must")
+                .email("timo@gmail.com")
+                .card(Card.builder().student(student2).build())
+                .build();
+
+        student3 = Student.builder()
+                .name("timothy")
+                .age(26)
+                .school("kyu")
+                .email("timothy@gmail.com")
+                .card(Card.builder().student(student3).build())
+                .build();
+
+        student4 = Student.builder()
+                .name("alextimothy")
+                .age(26)
+                .school("ktc")
+                .email("alextimothy@gmail.com")
+                .card(Card.builder().student(student4).build())
+                .build();
+
+        studentRepository.saveAll(List.of(student1, student2, student3, student4));
     }
 
     @AfterEach
@@ -57,16 +66,17 @@ class StudentRepositoryTest {
         student1 = null;
         student2 = null;
         student3 = null;
+        student4 = null;
         studentRepository.deleteAll();
     }
 
     @Test
     void testFindByEmail_Found() {
-        Student studentFromDb = studentRepository.findByEmail("timo@gmail.com");
-        assertThat(studentFromDb.getEmail()).isEqualTo(student1.getEmail());
-        assertThat(studentFromDb.getName()).isEqualTo(student1.getName());
-        assertThat(studentFromDb.getAge()).isEqualTo(student1.getAge());
-        assertThat(studentFromDb.getSchool()).isEqualTo(student1.getSchool());
+        Student studentFromDb = studentRepository.findByEmail("alextimothy@gmail.com");
+        assertThat(studentFromDb.getEmail()).isEqualTo(student4.getEmail());
+        assertThat(studentFromDb.getName()).isEqualTo(student4.getName());
+        assertThat(studentFromDb.getAge()).isEqualTo(student4.getAge());
+        assertThat(studentFromDb.getSchool()).isEqualTo(student4.getSchool());
     }
 
     @Test
@@ -77,8 +87,8 @@ class StudentRepositoryTest {
 
     @Test
     void testFindAllByName_Found() {
-        List<Student> studentList = studentRepository.findAllByName("timothy");
-        assertThat(studentList).containsExactlyInAnyOrder(student1, student2);
+        List<Student> studentList = studentRepository.findByNameContaining("timothy");
+        assertThat(studentList).containsExactlyInAnyOrder(student2, student3, student4);
     }
 
     @Test
@@ -88,14 +98,38 @@ class StudentRepositoryTest {
     }
 
     @Test
-    void existsByEmail() {
+    void existsByEmail_Found() {
+        boolean existsByEmail = studentRepository.existsByEmail("timo@gmail.com");
+        assertThat(existsByEmail).isTrue();
     }
 
     @Test
-    void existsByName() {
+    void existsByEmail_NotFound() {
+        boolean existsByEmail = studentRepository.existsByEmail("timoo@gmail.com");
+        assertThat(existsByEmail).isFalse();
     }
 
     @Test
-    void findAllByAge() {
+    void existsByName_Found() {
+        boolean existsByName = studentRepository.existsByName("timothy");
+        assertThat(existsByName).isTrue();
+    }
+
+    @Test
+    void existsByName_NotFound() {
+        boolean existsByName = studentRepository.existsByName("timothyo");
+        assertThat(existsByName).isFalse();
+    }
+
+    @Test
+    void findAllByAge_Found() {
+        List<Student> students = studentRepository.findAllByAge(24);
+        assertThat(students.size() > 0).isTrue();
+    }
+
+    @Test
+    void findAllByAge_NotFound() {
+        List<Student> students = studentRepository.findAllByAge(28);
+        assertThat(students.isEmpty()).isTrue();
     }
 }

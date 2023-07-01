@@ -5,12 +5,12 @@ import com.example.library.mgt.system.dtos.responses.TransactionResponseDto;
 import com.example.library.mgt.system.enums.BookStatus;
 import com.example.library.mgt.system.enums.TransactionStatus;
 import com.example.library.mgt.system.exceptions.BookNotAvailableException;
+import com.example.library.mgt.system.exceptions.InvalidCardException;
 import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.models.Book;
 import com.example.library.mgt.system.models.BookItem;
 import com.example.library.mgt.system.models.Student;
 import com.example.library.mgt.system.models.Transaction;
-import com.example.library.mgt.system.repositories.BookItemRepository;
 import com.example.library.mgt.system.repositories.BookRepository;
 import com.example.library.mgt.system.repositories.StudentRepository;
 import com.example.library.mgt.system.repositories.TransactionRepository;
@@ -51,6 +51,13 @@ public class TransactionServiceImpl implements TransactionService {
             throw new ResourceNotFoundException("No student with email " + bookingDto.getStudentEmail());
         }
 
+        Student student = studentRepository.findByEmail(bookingDto.getStudentEmail());
+        if (student.getCard().isHasBooked()){
+            throw new InvalidCardException("A book copy booked with this card has not yet been returned");
+        } else if (student.getCard().getExpiresAt().isAfter(LocalDate.now())) {
+            throw new InvalidCardException("Card is expired");
+        }
+
         Book book = bookRepository.findByTitle(bookingDto.getBookTitle());
 
         if (book.getNumberOfCopies() == 0) {
@@ -59,8 +66,6 @@ public class TransactionServiceImpl implements TransactionService {
 
             throw new BookNotAvailableException("No copies available");
         }
-
-        Student student = studentRepository.findByEmail(bookingDto.getStudentEmail());
 
         BookItem bookItem = book.getBookItems().remove(0);
         bookItem.setStatus(BookStatus.BOOKED);
@@ -77,6 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         student.getTransactions().add(transaction);
         student.getBookItems().add(bookItem);
+        student.getCard().setHasBooked(true);
         studentRepository.save(student);
 
         return TransactionResponseDto.builder()

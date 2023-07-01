@@ -23,7 +23,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @PostMapping("/add")
+    @PostMapping("/add") // works well
     public ResponseEntity<StudentResponseDto> addStudent(@RequestBody StudentEntryDto studentEntryDto) throws Exception {
         StudentResponseDto studentResponseDto = new StudentResponseDto();
 
@@ -42,7 +42,7 @@ public class StudentController {
         return new ResponseEntity<>(studentResponseDto, studentResponseDto.getResponseStatusCode());
     }
 
-    @GetMapping("/get-by-id/{studentId}")
+    @GetMapping("/get-by-id/{studentId}") //works well
     public ResponseEntity<StudentResponseDto> getStudentById(@PathVariable("studentId") Integer studentId) throws Exception {
         StudentResponseDto studentResponseDto = new StudentResponseDto();
 
