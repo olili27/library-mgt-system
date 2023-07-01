@@ -53,9 +53,15 @@ public class TransactionServiceImpl implements TransactionService {
 
         Student student = studentRepository.findByEmail(bookingDto.getStudentEmail());
         if (student.getCard().isHasBooked()){
+            transaction.setStatus(TransactionStatus.FAILED);
+            transactionRepository.save(transaction);
+
             throw new InvalidCardException("A book copy booked with this card has not yet been returned");
-        } else if (student.getCard().getExpiresAt().isAfter(LocalDate.now())) {
-            throw new InvalidCardException("Card is expired");
+        } else if (student.getCard().getExpiresAt().isBefore(LocalDate.now())) {
+            transaction.setStatus(TransactionStatus.FAILED);
+            transactionRepository.save(transaction);
+
+            throw new InvalidCardException("Card is expired " + student.getCard());
         }
 
         Book book = bookRepository.findByTitle(bookingDto.getBookTitle());

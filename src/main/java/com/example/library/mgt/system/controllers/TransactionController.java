@@ -4,6 +4,7 @@ import com.example.library.mgt.system.dtos.entries.TransactionEntryDto;
 import com.example.library.mgt.system.dtos.responses.TransactionResponseDto;
 import com.example.library.mgt.system.exceptions.BookNotAvailableException;
 import com.example.library.mgt.system.exceptions.InvalidCardException;
+import com.example.library.mgt.system.exceptions.ResourceNotFoundException;
 import com.example.library.mgt.system.services.interfaces.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class TransactionController {
             responseDto = transactionService.bookACopy(bookingDto);
             responseDto.setResponseStatusCode(HttpStatus.CREATED);
         }
-        catch (ResourceAccessException | BookNotAvailableException e) {
+        catch (ResourceNotFoundException | BookNotAvailableException e) {
             responseDto.setResponseMessage(e.getMessage());
             responseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
         }
