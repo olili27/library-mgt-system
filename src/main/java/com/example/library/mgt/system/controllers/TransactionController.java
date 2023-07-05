@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.ResourceAccessException;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +36,25 @@ public class TransactionController {
         catch (InvalidCardException e) {
             responseDto.setResponseMessage(e.getMessage());
             responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+            responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(responseDto, responseDto.getResponseStatusCode());
+    }
+
+    @PostMapping("/return-a-copy")
+    public ResponseEntity<TransactionResponseDto> returnACopy(@RequestBody TransactionEntryDto returnABookDto) throws Exception {
+        TransactionResponseDto responseDto = new TransactionResponseDto();
+
+        try {
+            responseDto = transactionService.returnACopy(returnABookDto);
+            responseDto.setResponseStatusCode(HttpStatus.OK);
+        }
+        catch (ResourceNotFoundException e) {
+            responseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
+            responseDto.setResponseMessage(e.getMessage());
         }
         catch (Exception e) {
             responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);

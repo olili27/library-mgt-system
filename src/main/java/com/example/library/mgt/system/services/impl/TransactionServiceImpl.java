@@ -11,6 +11,7 @@ import com.example.library.mgt.system.models.Book;
 import com.example.library.mgt.system.models.BookItem;
 import com.example.library.mgt.system.models.Student;
 import com.example.library.mgt.system.models.Transaction;
+import com.example.library.mgt.system.repositories.BookItemRepository;
 import com.example.library.mgt.system.repositories.BookRepository;
 import com.example.library.mgt.system.repositories.StudentRepository;
 import com.example.library.mgt.system.repositories.TransactionRepository;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,6 +32,8 @@ public class TransactionServiceImpl implements TransactionService {
     private final BookRepository bookRepository;
 
     private final TransactionRepository transactionRepository;
+
+    private final BookItemRepository bookItemRepository;
 
     @Override
     public TransactionResponseDto bookACopy(TransactionEntryDto bookingDto) throws Exception {
@@ -97,5 +101,71 @@ public class TransactionServiceImpl implements TransactionService {
                 .studentName(student.getName())
                 .studentEmail(student.getEmail())
                 .build();
+    }
+
+    @Override
+    public TransactionResponseDto returnACopy(TransactionEntryDto returnACopyDto) throws Exception {
+        Transaction transaction = new Transaction();
+        transaction.setTransactionNumber(String.valueOf(UUID.randomUUID()));
+        transaction.setHappenedAt(LocalDate.now());
+
+        if (!bookRepository.existsByTitle(returnACopyDto.getBookTitle())) {
+            transaction.setStatus(TransactionStatus.FAILED);
+            transactionRepository.save(transaction);
+
+            throw new ResourceNotFoundException("Book with title " + returnACopyDto.getBookTitle() + " does not exist");
+        }
+
+        if (!studentRepository.existsByEmail(returnACopyDto.getStudentEmail())) {
+            transaction.setStatus(TransactionStatus.FAILED);
+            transactionRepository.save(transaction);
+
+            throw new ResourceNotFoundException("No student with email " + returnACopyDto.getStudentEmail());
+        }
+
+        List<BookItem> bookItems = bookItemRepository.findByTitle(returnACopyDto.getBookTitle());
+        List<Student> students = null;
+        BookItem bookItem = null;
+
+        for (BookItem item: bookItems) {
+            if (item.getStatus() == BookStatus.BOOKED) {
+                students = item.getStudents();
+                bookItem = item;
+                break;
+            }
+        }
+
+        Student student = null;
+
+        assert students != null;
+        for (Student std: students) {
+            if (std.getEmail().equals(returnACopyDto.getStudentEmail())) {
+                student = std;
+
+                bookItem.setStatus(BookStatus.AVAILABLE);
+                bookItem.getTransactions().add(transaction);
+
+                Book book = bookItem.getBook();
+                book.getBookItems().add(bookItem);
+                book.setNumberOfCopies(book.getBookItems().size());
+
+                student.getTransactions().add(transaction);
+
+                transaction.setStudent(student);
+                transaction.setBookItem(bookItem);
+                transaction.setStatus(TransactionStatus.SUCCESS);
+
+                studentRepository.save(student);
+
+                return TransactionResponseDto.builder()
+                        .transactionNumber(transaction.getTransactionNumber())
+                        .bookTitle(bookItem.getTitle())
+                        .studentName(student.getName())
+                        .studentEmail(student.getEmail())
+                        .build();
+            }
+        }
+
+        throw new ResourceNotFoundException("Student not found");
     }
 }

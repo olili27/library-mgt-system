@@ -5,4 +5,6 @@ import com.example.library.mgt.system.dtos.responses.TransactionResponseDto;
 
 public interface TransactionService {
     TransactionResponseDto bookACopy(TransactionEntryDto bookingDto) throws Exception;
+
+    TransactionResponseDto returnACopy(TransactionEntryDto returnACopyDto) throws Exception;
 }
