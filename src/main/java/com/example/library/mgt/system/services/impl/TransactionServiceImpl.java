@@ -153,9 +153,11 @@ public class TransactionServiceImpl implements TransactionService {
 
                 Book book = bookItem.getBook();
                 book.getBookItems().add(bookItem);
-                book.setNumberOfCopies(book.getBookItems().size());
+                book.setNumberOfCopies(book.getNumberOfCopies() + 1);
+                book.setStatus(BookStatus.AVAILABLE);
 
                 student.getTransactions().add(transaction);
+                student.getCard().setHasBooked(false);
 
                 transaction.setStudent(student);
                 transaction.setBookItem(bookItem);
@@ -172,6 +174,6 @@ public class TransactionServiceImpl implements TransactionService {
             }
         }
 
-        throw new ResourceNotFoundException("Student not found");
+        throw new Exception("Transaction could not complete");
     }
 }
