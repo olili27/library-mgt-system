@@ -35,9 +35,11 @@ public class TransactionController {
         }
         catch (InvalidCardException e) {
             responseDto.setResponseMessage(e.getMessage());
+            responseDto.setBookTitle(bookingDto.getBookTitle());
             responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
+            responseDto.setBookTitle(bookingDto.getBookTitle());
             responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
 
@@ -54,9 +56,11 @@ public class TransactionController {
         }
         catch (ResourceNotFoundException e) {
             responseDto.setResponseStatusCode(HttpStatus.NOT_FOUND);
+            responseDto.setBookTitle(returnABookDto.getBookTitle());
             responseDto.setResponseMessage(e.getMessage());
         }
         catch (Exception e) {
+            responseDto.setBookTitle(returnABookDto.getBookTitle());
             responseDto.setResponseStatusCode(HttpStatus.BAD_REQUEST);
         }
 

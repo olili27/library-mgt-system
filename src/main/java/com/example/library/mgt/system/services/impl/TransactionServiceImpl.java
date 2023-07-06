@@ -68,36 +68,42 @@ public class TransactionServiceImpl implements TransactionService {
             throw new InvalidCardException("Card is expired " + student.getCard());
         }
 
-        Book book = bookRepository.findByTitle(bookingDto.getBookTitle());
-
-        if (book.getNumberOfCopies() == 0) {
+        if (bookRepository.findByTitle(bookingDto.getBookTitle()).getNumberOfCopies() == 0) {
             transaction.setStatus(TransactionStatus.FAILED);
             transactionRepository.save(transaction);
 
             throw new BookNotAvailableException("No copies available");
         }
 
-        BookItem bookItem = book.getBookItems().remove(0);
-        bookItem.setStatus(BookStatus.BOOKED);
-        bookItem.getStudents().add(student);
-        bookItem.getTransactions().add(transaction);
+        List<BookItem> bookItemList = bookItemRepository.findByTitle(bookingDto.getBookTitle());
+        for (BookItem bookItem: bookItemList) {
+            if (bookItem.getStatus() == BookStatus.AVAILABLE) {
+                Book book = bookItem.getBook();
+                book.getBookItems().remove(bookItem);
+                book.setNumberOfCopies(book.getNumberOfCopies() - 1);
 
-        book.setNumberOfCopies(book.getBookItems().size());
+                if (book.getNumberOfCopies() == 0) book.setStatus(BookStatus.OUT_OF_COPIES);
 
-        if (book.getNumberOfCopies() == 0) book.setStatus(BookStatus.OUT_OF_COPIES);
+                bookItem.setStatus(BookStatus.BOOKED);
+                bookItem.getStudents().add(student);
+                bookItem.getTransactions().add(transaction);
 
-        transaction.setBookItem(bookItem);
-        transaction.setStudent(student);
-        transaction.setStatus(TransactionStatus.SUCCESS);
+                transaction.setBookItem(bookItem);
+                transaction.setStudent(student);
+                transaction.setStatus(TransactionStatus.SUCCESS);
 
-        student.getTransactions().add(transaction);
-        student.getBookItems().add(bookItem);
-        student.getCard().setHasBooked(true);
-        studentRepository.save(student);
+                student.getTransactions().add(transaction);
+                student.getBookItems().add(bookItem);
+                student.getCard().setHasBooked(true);
+                studentRepository.save(student);
+
+                break;
+            }
+        }
 
         return TransactionResponseDto.builder()
                 .transactionNumber(transaction.getTransactionNumber())
-                .bookTitle(book.getTitle())
+                .bookTitle(bookingDto.getBookTitle())
                 .studentName(student.getName())
                 .studentEmail(student.getEmail())
                 .build();
